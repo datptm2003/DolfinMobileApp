@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from 'src/schemas/user.schema';
+import { User } from '../schemas/user.schema';
 
 @Controller('user')
 export class UserController {
