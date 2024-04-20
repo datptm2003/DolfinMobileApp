@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import 'dotenv/config';
-import { hostname } from 'os';
 
 const PORT = process.env.PORT || 3000
 
