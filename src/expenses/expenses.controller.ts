@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { Expense } from 'src/schemas/expenses.schema';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 
