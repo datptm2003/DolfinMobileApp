@@ -1,64 +1,44 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../schemas/user.schema';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
     constructor(private userService: UserService) {}
 
-    @Post()
-    async create(@Body() newUser: User): Promise<Object> {
-        try {
-            const data = await this.userService.create(newUser);
-            return {data}
-        } catch (err) {
-            return { message: err.message || 'Internal Server Error' };
-        }
-    }
-
+    @UseGuards(AuthGuard)
     @Get()
-    async getAll(): Promise<Object> {
-        try {
-            const data = await this.userService.findAll()
-            return {data}
-        } catch (err) {
-            return { message: err.message || 'Internal Server Error' };
-        }
+    async getAll(@Req() request: Request): Promise<User[]> {
+        const userId = request['user_data'].id;
+        console.log(userId);
+        const data = await this.userService.findAll()
+        return data
     }
 
-    @Get('/:id')
-    async getById(@Param('id') user_id: string): Promise<Object> {
-        try {
-            const data = await this.userService.findById(user_id)
-            return {data}
-        } catch (err) {
-            return { message: err.message || 'Internal Server Error' };
-        }
+    @UseGuards(AuthGuard)
+    @Get(':id')
+    findOne(@Param('id') id: string): Promise<User> {
+        return this.userService.findOne(id);
     }
 
-    @Patch('/:id')
-    async updateById(
-        @Param('id') user_id: string, 
-        @Body() updateProps: Partial<User>
-    ): Promise<Object> {
-        try {
-            const {firstName, lastName} = updateProps
-            const data = await this.userService.updateById({user_id, firstName, lastName})
-            return {data}
-        } catch (err) {
-            return { message: err.message || 'Internal Server Error' };
-        }
+    @UseGuards(AuthGuard)
+    @Post()
+    create(@Body() createUserDto: CreateUserDto): Promise<User> {
+        return this.userService.create(createUserDto);
     }
 
-    @Delete('/:id')
-    async deleteById(
-        @Param('id') user_id: string
-    ): Promise<Object> {
-        try {
-            const data = await this.userService.deleteById(user_id)
-            return {message: data}
-        } catch (err) {
-            return { message: err.message || 'Internal Server Error' };
-        }
+    @UseGuards(AuthGuard)
+    @Put(':id')
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+        return this.userService.update(id, updateUserDto);
+    }
+
+    @UseGuards(AuthGuard)
+    @Delete(':id')
+    delete(@Param('id') id: string) {
+        return this.userService.delete(id);
     }
 }

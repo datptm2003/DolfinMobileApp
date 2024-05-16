@@ -7,16 +7,16 @@ import { Payment } from 'src/schemas/payment.schema';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Post()
-  async create(@Body() newPayment: Payment): Promise<Object>  {
-    // Here, you would normally perform any necessary validation or transformation
-    try {
-      const data = await this.paymentsService.create(newPayment);
-      return {data}
-    } catch (err) {
-        return { message: err.message || 'Internal Server Error' };
-    }
-  }
+  // @Post()
+  // async create(@Body() newPayment: Payment): Promise<Object>  {
+  //   // Here, you would normally perform any necessary validation or transformation
+  //   try {
+  //     const data = await this.paymentsService.create(newPayment);
+  //     return {data}
+  //   } catch (err) {
+  //       return { message: err.message || 'Internal Server Error' };
+  //   }
+  // }
 
   @Get()
   async findAll() {

@@ -1,12 +1,15 @@
-// src/payments/schemas/payment.schema.ts
+// src/Expenses/schemas/Expense.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from '../schemas/user.schema';
 
-export type PaymentDocument = Payment & Document;
+export type ExpenseDocument = Expense & Document;
 
 @Schema()
-export class Payment {
+export class Expense {
+  @Prop({ required: true })
+  userID: string;
+
   @Prop({ required: true, type: Number, min: 0.01 })
   amount: number;
 
@@ -21,9 +24,6 @@ export class Payment {
 
   @Prop({ required: true, type: String })
   time: string;
-
-  @Prop({ required: true, type: Boolean })
-  isScheduled: boolean;
 }
 
-export const PaymentSchema = SchemaFactory.createForClass(Payment);
+export const ExpenseSchema = SchemaFactory.createForClass(Expense);

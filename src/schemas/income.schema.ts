@@ -3,10 +3,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from '../schemas/user.schema';
 
-export type PaymentDocument = Payment & Document;
+export type IncomeDocument = Income & Document;
 
 @Schema()
-export class Payment {
+export class Income {
   @Prop({ required: true, type: Number, min: 0.01 })
   amount: number;
 
@@ -15,6 +15,9 @@ export class Payment {
 
   @Prop({ required: true, type: String })
   category: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  user: User | Types.ObjectId;
 
   @Prop({ required: true, type: Date })
   date: Date;
@@ -26,4 +29,4 @@ export class Payment {
   isScheduled: boolean;
 }
 
-export const PaymentSchema = SchemaFactory.createForClass(Payment);
+export const IncomeSchema = SchemaFactory.createForClass(Income);

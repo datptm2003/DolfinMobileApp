@@ -2,35 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { User } from '../schemas/user.schema';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-
     constructor(
         @InjectModel(User.name)
         private userModel: mongoose.Model<User>,
     ) {}
 
-    //New user
-    async create({
-        email,
-        password,
-        firstName,
-        lastName
-    }): Promise<User> {
-
-        const user = await this.userModel.create({
-            email,
-            password,
-            firstName,
-            lastName
-        })
-
-        return user
-    }
-
     //getAllUsers
-
     async findAll(): Promise<User[]> {
 
         const users = await this.userModel.find()
@@ -38,59 +21,20 @@ export class UserService {
         return users
     }
 
-    //findById
-    async findById(user_id): Promise<User>{
-
-        const user = await this.userModel.findById(user_id)
-        if(!user) {
-            return Promise.reject({
-                status: 404,
-                message: `User with id=${user_id} not found!`
-            })
-        }
-
-        return user
+    async findOne(id: string): Promise<User> {
+        return await this.userModel.findById(id);
     }
 
-    //updateById
-    async updateById({
-        user_id,
-        firstName,
-        lastName
-    }): Promise<User>{
-
-        let updates: Partial<User> = {}
-        if (firstName) { updates.firstName = firstName}
-        if (lastName) { updates.lastName = lastName}
-
-        const user = await this.userModel.findByIdAndUpdate(
-            user_id,
-            updates,
-            { new: true }
-        )
-
-        if(!user) {
-            return Promise.reject({
-                status: 404,
-                message: `User with id=${user_id} not found!`
-            })
-        }
-
-        return user
+    async create(createUserDto: CreateUserDto): Promise<User> {
+        const hashPassword = await bcrypt.hash(createUserDto.password, 10);
+        return await new this.userModel({ ...createUserDto, password: hashPassword }).save();
     }
 
-    //DeleteById
-    async deleteById(user_id: string): Promise<String> {
+    async update(id: string, updateUserDto: UpdateUserDto): Promise<boolean> {
+        return await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
+    }
 
-        const user  = await this.userModel.findByIdAndDelete(user_id)
-
-        if(!user) {
-            return Promise.reject({
-                status: 404,
-                message: `User with id=${user_id} not found!`
-            })
-        }
-
-        return  `User with id=${user_id} deleted successfully!`
+    async delete(id: string): Promise<boolean> {
+        return await this.userModel.findByIdAndDelete(id);
     }
 }
