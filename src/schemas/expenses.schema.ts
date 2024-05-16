@@ -1,4 +1,3 @@
-// src/Expenses/schemas/Expense.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from '../schemas/user.schema';

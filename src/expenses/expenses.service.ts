@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { Expense } from 'src/schemas/expenses.schema';
+import { Expense } from '../schemas/expenses.schema';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 
 @Injectable()

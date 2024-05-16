@@ -1,7 +1,6 @@
-// src/payments/payments.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PaymentsService } from './payment.service';
-import { Payment } from 'src/schemas/payment.schema';
+import { Payment } from '../schemas/payment.schema';
 
 @Controller('payments')
 export class PaymentsController {
