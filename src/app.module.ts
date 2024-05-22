@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PaymentModule } from './payment/payment.module';
 import { AuthModule } from './auth/auth.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { IncomeModule } from './income/income.module';
@@ -17,7 +16,6 @@ import { IncomeModule } from './income/income.module';
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
     UserModule,
-    PaymentModule,
     AuthModule,
     ExpensesModule,
     IncomeModule

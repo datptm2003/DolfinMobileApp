@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { Expense } from '../schemas/expenses.schema';
 import { AuthGuard } from '../auth/auth.guard';
@@ -6,12 +6,15 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { GetMonthlyExpenseDto } from './dto/get-monthly-expense.dto';
 import { GetDailyExpenseDto } from './dto/get-daily-expense.dto';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Expenses')
 @Controller('expenses')
 export class ExpensesController {
     constructor(private expenseService: ExpensesService) {}
     
     @UseGuards(AuthGuard)
+    @ApiBearerAuth('access-token')
     @Post()
     create(@Req() request: Request, @Body() createExpenseDto: CreateExpenseDto): Promise<Expense> {
         console.log(createExpenseDto);
@@ -20,6 +23,7 @@ export class ExpensesController {
     }
 
     @UseGuards(AuthGuard)
+    @ApiBearerAuth('access-token')
     @Put(':id')
     update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
         console.log(id)
@@ -27,6 +31,7 @@ export class ExpensesController {
     }
 
     @UseGuards(AuthGuard)
+    @ApiBearerAuth('access-token')
     @Delete(':id')
     delete(@Param('id') id: string) {
         return this.expenseService.delete(id);
@@ -34,19 +39,23 @@ export class ExpensesController {
 
     @UseGuards(AuthGuard)
     @Get('/totalexpense')
-    getMonthlyExpense(@Req() request: Request, @Body() GetMonthlyExpense: GetMonthlyExpenseDto) {
-        console.log(GetMonthlyExpense);
+    @ApiBearerAuth('access-token')
+    @ApiQuery({ name: 'month', required: true, type: Number })
+    @ApiQuery({ name: 'year', required: true, type: Number })
+    getMonthlyExpense(@Req() request: Request, @Query('month') month: number, @Query('year') year: number) {
         const userId = request['user_data'].id;
-        console.log(userId)
-        return this.expenseService.getMonthlyExpense(userId, GetMonthlyExpense);
+        return this.expenseService.getMonthlyExpense(userId, month, year);
     }
 
     @UseGuards(AuthGuard)
     @Get()
-    getDailyExpense(@Req() request: Request, @Body() getDailyExpense: GetDailyExpenseDto) {
-        console.log(getDailyExpense);
+    @ApiBearerAuth('access-token')
+    @ApiQuery({ name: 'day', required: true, type: Number })
+    @ApiQuery({ name: 'month', required: true, type: Number })
+    @ApiQuery({ name: 'year', required: true, type: Number })
+    getDailyExpense(@Req() request: Request, @Query('day') day: number, @Query('month') month: number, @Query('year') year: number) {
         const userId = request['user_data'].id;
         console.log(userId)
-        return this.expenseService.getDailyExpense(userId, getDailyExpense);
+        return this.expenseService.getDailyExpense(userId, day, month, year);
     }
 }

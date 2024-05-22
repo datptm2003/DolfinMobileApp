@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { User } from '../schemas/user.schema';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -18,6 +18,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'Login' })
   @ApiResponse({status:201, description:'Login successfully!'})
   @ApiResponse({status:401, description:'Login fail!'})
   @UsePipes(ValidationPipe)

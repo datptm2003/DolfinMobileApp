@@ -26,14 +26,10 @@ export class IncomesService {
         return await this.incomeModel.findByIdAndDelete(id);
     }
 
-    async getMonthlyIncome(id: string, getMonthlyIncomeDto: GetMonthlyIncomeDto): Promise<number> {
-        const { month, year } = getMonthlyIncomeDto;
-
-        // Calculate the start and end dates of the month
+    async getMonthlyIncome(id: string, month: number, year: number): Promise<number> {
         const startDate = new Date(year, month - 1, 1);
         const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
-        // Fetch and sum the incomes for the specified month
         const incomes = await this.incomeModel.find({
             userID: id,
             date: { $gte: startDate, $lte: endDate },
@@ -46,9 +42,7 @@ export class IncomesService {
         return totalIncome;
     }
 
-    async getDailyIncome(id: string, getDailyIncomeDto: GetDailyIncomeDto): Promise<Object> {
-        const { day, month, year } = getDailyIncomeDto;
-
+    async getDailyIncome(id: string, day: number, month: number, year: number): Promise<Object> {
         // Calculate the start and end times of the specified day
         const startDate = new Date(
             year, 

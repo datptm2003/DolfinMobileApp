@@ -26,11 +26,11 @@ export class ExpensesService {
         return await this.expenseModel.findByIdAndDelete(id);
     }
 
-    async getMonthlyExpense(id: string, getMonthlyExpenseDto: GetMonthlyExpenseDto): Promise<number> {
-        const { month, year } = getMonthlyExpenseDto;
-
+    async getMonthlyExpense(id: string, month: number, year: number): Promise<number> {
         // Calculate the start and end dates of the month
+        console.log(" month:", month, " year:", year);
         const startDate = new Date(year, month - 1, 1);
+        console.log(" startDate:", startDate);
         const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
         // Fetch and sum the expenses for the specified month
@@ -46,10 +46,7 @@ export class ExpensesService {
         return totalExpense;
     }
 
-    async getDailyExpense(id: string, getDailyExpenseDto: GetDailyExpenseDto): Promise<Object> {
-        const { day, month, year } = getDailyExpenseDto;
-
-        // Calculate the start and end times of the specified day
+    async getDailyExpense(id: string, day: number, month: number, year: number): Promise<Object> {
         const startDate = new Date(
             year, 
             month - 1, 

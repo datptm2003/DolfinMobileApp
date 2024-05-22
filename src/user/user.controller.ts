@@ -4,13 +4,16 @@ import { User } from '../schemas/user.schema';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
     constructor(private userService: UserService) {}
 
     @UseGuards(AuthGuard)
     @Get()
+    @ApiOperation({ summary: 'Get all users' })
     async getAll(@Req() request: Request): Promise<User[]> {
         const userId = request['user_data'].id;
         console.log(userId);
