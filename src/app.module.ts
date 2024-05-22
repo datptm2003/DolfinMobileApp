@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PaymentModule } from './payment/payment.module';
 import { AuthModule } from './auth/auth.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import { IncomeModule } from './income/income.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { ExpensesModule } from './expenses/expenses.module';
     UserModule,
     PaymentModule,
     AuthModule,
-    ExpensesModule
+    ExpensesModule,
+    IncomeModule
   ],
   controllers: [AppController],
   providers: [AppService],

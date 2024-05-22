@@ -6,6 +6,9 @@ export type IncomeDocument = Income & Document;
 
 @Schema()
 export class Income {
+  @Prop({ required: true })
+  userID: string;
+
   @Prop({ required: true, type: Number, min: 0.01 })
   amount: number;
 
@@ -14,9 +17,6 @@ export class Income {
 
   @Prop({ required: true, type: String })
   category: string;
-
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  user: User | Types.ObjectId;
 
   @Prop({ required: true, type: Date })
   date: Date;
