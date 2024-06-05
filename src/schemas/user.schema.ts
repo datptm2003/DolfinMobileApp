@@ -15,10 +15,16 @@ export class User {
     refresh_token: string;
 
     @Prop()
-    firstName: string;
+    name: string;
 
     @Prop()
-    lastName: string;
+    job:string;
+
+    @Prop()
+    income:string;
+
+    @Prop()
+    year:string;
 
     @Prop({ default: 1 })
     status: number;

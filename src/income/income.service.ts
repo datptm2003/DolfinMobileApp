@@ -67,4 +67,21 @@ export class IncomesService {
 
         return incomes;
     }
+
+    async getMonthlyIncomes(id: string, month: number, year: number): Promise<Object> {
+        // Start date should be the first day of the month at 00:00:00.000
+        const startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
+    
+        // End date should be the last day of the month at 23:59:59.999
+        const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+    
+        // Fetch the expenses for the specified month
+        const expenses = await this.incomeModel.find({
+            userID: id,
+            date: { $gte: startDate, $lte: endDate },
+        }).exec();
+    
+        // Return the total expenses
+        return expenses;
+    }
 }
